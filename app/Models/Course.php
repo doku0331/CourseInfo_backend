@@ -11,6 +11,10 @@ class Course extends Model
 
 //TODO: 加入fillable的屬性
 
+    protected $hidden = [
+        'create_at',
+        'updated_at',
+    ];
     public function comments()
     {
         return $this->hasMany('App\Models\Comment', 'course_id', 'id');
