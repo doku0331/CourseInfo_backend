@@ -9,6 +9,8 @@ class Course extends Model
 {
     use HasFactory;
 
+//TODO: 加入fillable的屬性
+
     public function comments()
     {
         return $this->hasMany('App\Models\Comment', 'course_id', 'id');

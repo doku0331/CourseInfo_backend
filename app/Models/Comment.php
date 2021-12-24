@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
+
+    //TODO: 加入fillable的屬性
+
     public function course()
     {
         return $this->belongsTo('App\Models\Course', 'course_id', 'id');
