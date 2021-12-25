@@ -9,7 +9,15 @@ class Comment extends Model
 {
     use HasFactory;
 
-    //TODO: 加入fillable的屬性
+    protected $fillable = [
+        'rating',
+        'teaching',
+        'grading',
+        'assignment',
+        'comment',
+        'isPublish',
+        'course_id',
+    ];
 
     public function user()
     {

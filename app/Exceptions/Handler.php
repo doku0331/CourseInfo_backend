@@ -6,6 +6,7 @@ use App\Traits\ApiResponseTrait;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
@@ -65,6 +66,12 @@ class Handler extends ExceptionHandler
                 return
                 $this->errorResponse(
                     $exception->getMessage(),
+                    Response::HTTP_METHOD_NOT_ALLOWED);
+            }
+            if ($exception instanceof AccessDeniedException) {
+                return
+                $this->errorResponse(
+                    "你沒有權限",
                     Response::HTTP_METHOD_NOT_ALLOWED);
             }
 
