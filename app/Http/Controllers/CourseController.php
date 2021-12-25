@@ -78,7 +78,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $response = [
-            'data' => $course
+            'data' => $course,
         ];
 
         return response($response, 200);

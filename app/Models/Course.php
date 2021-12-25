@@ -22,7 +22,7 @@ class Course extends Model
 
     public function likes()
     {
-        return $this->belongsToMany('App\Modles\User', 'course_user_likes')
+        return $this->belongsToMany('App\Models\User', 'course_user_likes')
             ->withTimestamps();
     }
 }

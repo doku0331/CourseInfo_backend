@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Course\CourseLikeController;
+use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Auth\ApiController;
 use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
@@ -21,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('courses', CourseController::class);
+Route::get('/user/likes', [UserController::class, 'userLike']);
 
+Route::apiResource('courses.likes', CourseLikeController::class)->only(['store']);
 Route::post('/register', [ApiController::class, 'register']);
 Route::post('/login', [ApiController::class, 'login']);
 Route::post('/refresh', [ApiController::class, 'refresh']);
