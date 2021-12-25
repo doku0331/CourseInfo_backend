@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('courses', CourseController::class);
 Route::get('/user/likes', [UserController::class, 'userLike']);
+Route::get('/user/mypublish', [UserController::class, 'myPublish']);
 
 Route::apiResource('courses.likes', CourseLikeController::class)->only(['store']);
 Route::post('/register', [ApiController::class, 'register']);

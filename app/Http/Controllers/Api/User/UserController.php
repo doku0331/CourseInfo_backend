@@ -14,6 +14,14 @@ class UserController extends Controller
         $this->middleware('auth:api');
     }
 
+    //取得所有我已經建立的文章
+    public function myPublish()
+    {
+        $user = User::find(Auth::user()->id);
+
+        return response(['data' => $user->comments()->get()], 200);
+    }
+    //返回使用者關注的課程
     public function userLike()
     {
         $userId = Auth::user()->id;

@@ -24,8 +24,8 @@ class ApiController extends Controller
         $api_token = Str::random(80);
         $data = array_merge($request->all(), compact('api_token'));
         $this->create($data);
-
-        return compact('api_token');
+        $result = ['api_token' => $api_token, 'name' => $request->name];
+        return response(['data' => $result], 201);
     }
 
     protected function validator(array $data)
@@ -64,7 +64,6 @@ class ApiController extends Controller
         if (!$user) {
             return response()->json(['message' => '該使用者不存在'],
                 404);
-
         }
 
         if (!password_verify(request('password'), $user->password)) {
@@ -75,17 +74,9 @@ class ApiController extends Controller
         $api_token = Str::random(80);
         $user->update(['api_token' => hash('sha256', $api_token)]);
 
-        return compact('api_token');
+        $result = ['api_token' => $api_token, 'name' => $user->name];
+        return response(['data' => $result], 201);
+
     }
 
-    public function refresh()
-    {
-        $api_token = Str::random(80);
-        $userId = Auth::id();
-        $user = User::findOrFail($userId);
-
-        $user->update(['api_token' => hash('sha256', $api_token)]);
-
-        return compact('api_token');
-    }
 }
