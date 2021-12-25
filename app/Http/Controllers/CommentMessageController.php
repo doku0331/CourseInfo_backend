@@ -18,16 +18,6 @@ class CommentMessageController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -46,18 +36,7 @@ class CommentMessageController extends Controller
      */
     public function show(CommentMessage $CommentMessage)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CommentMessage  $CommentMessage
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CommentMessage $CommentMessage)
-    {
-        //
     }
 
     /**

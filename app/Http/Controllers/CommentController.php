@@ -12,9 +12,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //找出所有comment沒必要
     }
 
     /**
@@ -36,7 +36,7 @@ class CommentController extends Controller
      */
     public function show(Comment $Comment)
     {
-        //
+        response($Comment, 200);
     }
 
     /**
@@ -54,11 +54,12 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comment  $Comment
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $Comment)
+    public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return response(['message' => "刪除成功"], 200);
     }
 }

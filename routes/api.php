@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Course\CourseLikeController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Auth\ApiController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('courses', CourseController::class);
+
+Route::apiResource('comments', CommentController::class);
+
+Route::get('/course/{course}/comments/', [CourseController::class, 'CourseComment']);
+
 Route::get('/user/likes', [UserController::class, 'userLike']);
 Route::get('/user/mypublish', [UserController::class, 'myPublish']);
 
 Route::apiResource('courses.likes', CourseLikeController::class)->only(['store']);
+
 Route::post('/register', [ApiController::class, 'register']);
 Route::post('/login', [ApiController::class, 'login']);
 Route::post('/refresh', [ApiController::class, 'refresh']);

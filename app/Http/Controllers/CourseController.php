@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -116,5 +117,27 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         //
+    }
+
+    public function CourseComment(Course $course, Request $request)
+    {
+        //設定預設筆數
+        $limit = $request->limit ?? 10;
+        $comments = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->where('course_id', $course->id)
+            ->select(
+                'comments.id',
+                "rating",
+                "grading",
+                "assignment",
+                "comment",
+                "users.name as author"
+            )
+            ->get();
+
+        $result = compact('course', 'comments');
+
+        return response($result, 200);
     }
 }
