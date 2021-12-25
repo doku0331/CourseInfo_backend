@@ -46,4 +46,13 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Modles\course', 'course_user_likes')
             ->withTimestamps();
     }
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'user_id', 'id');
+    }
+    public function messages()
+    {
+        return $this->hasMany('App\Models\CommentMessage', 'user_id', 'id');
+    }
+
 }

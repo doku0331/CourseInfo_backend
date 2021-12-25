@@ -11,6 +11,10 @@ class Comment extends Model
 
     //TODO: 加入fillable的屬性
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
     public function course()
     {
         return $this->belongsTo('App\Models\Course', 'course_id', 'id');

@@ -15,4 +15,9 @@ class CommentMessage extends Model
     {
         return $this->belongsTo('App\Models\Comment', 'comment_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

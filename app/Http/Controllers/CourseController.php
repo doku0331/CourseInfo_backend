@@ -72,21 +72,25 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Course  $Course
+     * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $Course)
+    public function show(Course $course)
     {
-        //
+        $response = [
+            'data' => $course
+        ];
+
+        return response($response, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Course  $Course
+     * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $Course)
+    public function edit(Course $course)
     {
         //
     }
@@ -95,7 +99,7 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Course  $Course
+     * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Course $course)
@@ -106,10 +110,10 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Course  $Course
+     * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $Course)
+    public function destroy(Course $course)
     {
         //
     }
