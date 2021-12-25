@@ -17,7 +17,7 @@ class CourseFactory extends Factory
     public function definition()
     {
         return [
-            'course_name' => $this->faker->company,
+            'course_name' => $this->faker->word . "課程",
             'teacher' => $this->faker->name,
             'semester' => $this->faker->randomElement(['1081', '1082', '1091', '1101', '1092']),
             'department' => $this->faker->randomElement(['工程學院英語學士班', '應用外語學系', '資訊傳播學系', '資訊管理學系', '資訊工程學系']),
