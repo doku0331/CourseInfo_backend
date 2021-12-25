@@ -82,7 +82,8 @@ class CommentPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user, Comment $comment)
-    {return $user->id === $comment->user_id;
+    {
+        return $user->id === $comment->user_id;
     }
 
     /**
@@ -94,6 +95,6 @@ class CommentPolicy
      */
     public function forceDelete(User $user, Comment $comment)
     {
-        //
+        return $user->id === $comment->user_id;
     }
 }
