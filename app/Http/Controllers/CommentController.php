@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['show']]);
+        $this->middleware('auth:api', ['except' => ['show', 'CommentMessage']]);
     }
     /**
      * Display a listing of the resource.
@@ -30,8 +31,10 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        //policy的設定
         $this->authorize('create', Comment::class);
 
+        //驗證
         $this->validate($request, [
             'rating' => 'required|integer|max:5',
             'teaching' => 'nullable',
@@ -40,6 +43,7 @@ class CommentController extends Controller
             'comment' => 'nullable',
             'course_id' => 'nullable|exists:courses,id',
         ]);
+        //綁定關係
         //前端要把course_id一起傳送
         $comment = Auth()->user()->comments()->create($request->all());
         $comment = $comment->refresh();
@@ -66,6 +70,8 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
+        $this->authorize('update', $comment);
+
         $this->validate($request, [
             'rating' => 'required|integer|max:5',
             'teaching' => 'nullable',
@@ -74,7 +80,6 @@ class CommentController extends Controller
             'comment' => 'nullable',
             'course_id' => 'nullable|exists:courses,id',
         ]);
-        $this->authorize('update', $comment);
 
         // $this->validate()
         $comment->update($request->all());
@@ -92,5 +97,25 @@ class CommentController extends Controller
         $this->authorize('delete', $comment);
         $comment->delete();
         return response(['message' => "刪除成功"], 200);
+    }
+
+    public function CommentMessage(Comment $comment, Request $request)
+    {
+        //設定預設筆數
+        $limit = $request->limit ?? 10;
+        $messages = DB::table('comment_messages')
+            ->join('users', 'comment_messages.user_id', '=', 'users.id')
+            ->where('comment_id', $comment->id)
+            ->select(
+                'comment_messages.id',
+                "message",
+                "comment_messages.created_at",
+                "users.name as author"
+            )
+            ->paginate($limit);
+
+        $result = compact('comment', 'messages');
+
+        return response($result, 200);
     }
 }

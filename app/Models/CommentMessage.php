@@ -9,8 +9,10 @@ class CommentMessage extends Model
 {
     use HasFactory;
 
-//TODO: 加入fillable的屬性
-
+    protected $fillable = [
+        'message',
+        'comment_id',
+    ];
     public function comment()
     {
         return $this->belongsTo('App\Models\Comment', 'comment_id', 'id');

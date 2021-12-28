@@ -23,8 +23,9 @@ class ApiController extends Controller
 
         $api_token = Str::random(80);
         $data = array_merge($request->all(), compact('api_token'));
-        $this->create($data);
-        $result = ['api_token' => $api_token, 'name' => $request->name];
+        $user = $this->create($data);
+        $user->refresh();
+        $result = ['api_token' => $api_token, 'name' => $user->name, 'id' => $user->id];
         return response(['data' => $result], 201);
     }
 
@@ -74,7 +75,7 @@ class ApiController extends Controller
         $api_token = Str::random(80);
         $user->update(['api_token' => hash('sha256', $api_token)]);
 
-        $result = ['api_token' => $api_token, 'name' => $user->name];
+        $result = ['api_token' => $api_token, 'name' => $user->name, 'id' => $user->id];
         return response(['data' => $result], 201);
 
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Course\CourseLikeController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Auth\ApiController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentMessageController;
 use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,10 @@ Route::apiResource('courses', CourseController::class);
 
 Route::apiResource('comments', CommentController::class);
 
+Route::apiResource('messages', CommentMessageController::class);
+
 Route::get('/course/{course}/comments/', [CourseController::class, 'CourseComment']);
+Route::get('/comment/{comment}/messages/', [CommentController::class, 'CommentMessage']);
 
 Route::get('/user/likes', [UserController::class, 'userLike']);
 Route::get('/user/mypublish', [UserController::class, 'myPublish']);
