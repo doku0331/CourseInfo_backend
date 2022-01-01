@@ -34,7 +34,7 @@ class CommentMessageController extends Controller
 
         $this->validate($request, [
             'message' => 'nullable',
-            'comment_id' => 'nullable|exists:courses,id',
+            'comment_id' => 'nullable|exists:comments,id',
         ]);
         //前端要把course_id一起傳送
         $comment = Auth()->user()->messages()->create($request->all());

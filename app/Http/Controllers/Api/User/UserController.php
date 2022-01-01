@@ -17,9 +17,29 @@ class UserController extends Controller
     //取得所有我已經建立的文章
     public function myPublish()
     {
-        $user = User::find(Auth::user()->id);
+        $userId = Auth::user()->id;
+        $result = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->join('courses', 'courses.id', '=', 'comments.course_id')
+            ->where('user_id', $userId)
+            ->select(
+                'comments.id as id',
+                'courses.id as course_id',
+                'users.name as author',
 
-        return response(['data' => $user->comments()->get()], 200);
+                'rating',
+                'teaching',
+                'grading',
+                'assignment',
+                'comment',
+
+                'course_name',
+                'teacher',
+                'department',
+
+            )
+            ->get();
+        return response(['data' => $result], 200);
     }
     //返回使用者關注的課程
     public function userLike()
@@ -29,7 +49,7 @@ class UserController extends Controller
             ->join('courses', 'course_user_likes.course_id', '=', 'courses.id')
             ->where('user_id', $userId)
             ->select(
-                'course_id',
+                'courses.id',
                 "course_name",
                 "teacher",
                 "semester",

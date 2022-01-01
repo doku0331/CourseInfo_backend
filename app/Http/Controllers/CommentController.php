@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,9 +46,30 @@ class CommentController extends Controller
         ]);
         //綁定關係
         //前端要把course_id一起傳送
-        $comment = Auth()->user()->comments()->create($request->all());
-        $comment = $comment->refresh();
-        return response($comment, 201);
+        try {
+            DB::beginTransaction();
+            //建立關係 新增評論
+            $comment = Auth()->user()->comments()->create($request->all());
+            //讀取完整資料欄位
+            $comment = $comment->refresh();
+            //寫入第二張表
+            $course = Course::find($comment->course_id);
+            $like = DB::table('course_user_likes')
+                ->where('course_id', $comment->course_id)
+                ->where('user_id', Auth()->user()->id)
+                ->first();
+            if (!isset($like)) {
+                $course->likes()->attach(auth()->user()->id);
+            }
+            DB::commit();
+            return response($comment, 201);
+
+        } catch (\Exception$e) {
+            DB::rollBack();
+            return response(
+                ['message' => '異常'], 500
+            );
+        }
     }
 
     /**
@@ -101,20 +123,32 @@ class CommentController extends Controller
 
     public function CommentMessage(Comment $comment, Request $request)
     {
-        //設定預設筆數
-        $limit = $request->limit ?? 10;
+        $commentContent = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->where('comments.id', $comment->id)
+            ->select(
+                'comments.id',
+                "rating",
+                'teaching',
+                "grading",
+                "assignment",
+                "comment",
+                "users.name as author"
+            )
+            ->first();
+
         $messages = DB::table('comment_messages')
             ->join('users', 'comment_messages.user_id', '=', 'users.id')
             ->where('comment_id', $comment->id)
             ->select(
+                'users.id as authorId',
                 'comment_messages.id',
                 "message",
                 "comment_messages.created_at",
                 "users.name as author"
-            )
-            ->paginate($limit);
+            )->get();
 
-        $result = compact('comment', 'messages');
+        $result = compact('commentContent', 'messages');
 
         return response($result, 200);
     }

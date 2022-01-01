@@ -16,7 +16,6 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-
         /*檢查快取 設定查詢條件 產生快取*/
         $url = $request->url();
         //取得query
@@ -38,6 +37,15 @@ class CourseController extends Controller
 
         //建立查詢建構器 分段寫SQL
         $query = Course::query();
+
+        //參數範例 ?filters=teacher:陳,semester:109
+        if (isset($request->filters)) {
+            $filters = explode(',', $request->filters);
+            foreach ($filters as $key => $filter) {
+                list($key, $value) = explode(':', $filter);
+                $query->where($key, 'like', "%$value%");
+            }
+        }
 
         // 頁數化並在生成其他頁數連接時加入當前篩選條件資料
         $courses = $query->paginate($limit)
@@ -127,8 +135,10 @@ class CourseController extends Controller
             ->join('users', 'comments.user_id', '=', 'users.id')
             ->where('course_id', $course->id)
             ->select(
+                'users.id as authorId',
                 'comments.id',
                 "rating",
+                'teaching',
                 "grading",
                 "assignment",
                 "comment",
